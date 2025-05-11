@@ -6,6 +6,11 @@ using namespace std;
 
 ifstream in("abce.in");
 ofstream out("abce.out");
+void nos()
+{
+    ios_base::sync_with_stdio(false);
+    in.tie(NULL);
+}
 
 class Node {
     int key;
@@ -203,7 +208,7 @@ Node* merge(Node* t1, Node* t2) {
 
 int main() {
 
-
+    nos();
   Node* root = NULL;
   int Q;
   in >> Q;
