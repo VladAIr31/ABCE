@@ -8,13 +8,13 @@ ofstream g("abce.out");
 const int maxim = 2147483647;
 enum COLOR { RED, BLACK };
 
-class Node {
+class Nod {
 public:
 int val;
 COLOR color;
-Node *left, *right, *parent;
+Nod *left, *right, *parent;
 
-Node(int val) : val(val) {
+Nod(int val) : val(val) {
 	parent = left = right = NULL;
 
 	// Node is created during insertion
@@ -23,7 +23,7 @@ Node(int val) : val(val) {
 }
 
 // returns pointer to uncle
-Node *uncle() {
+Nod *uncle() {
 	// If no parent or grandparent, then no uncle
 	if (parent == NULL || parent->parent == NULL)
 	return NULL;
@@ -40,7 +40,7 @@ Node *uncle() {
 bool isOnLeft() { return this == parent->left; }
 
 // returns pointer to sibling
-Node *sibling() {
+Nod *sibling() {
 	// sibling null if no parent
 	if (parent == NULL)
 	return NULL;
@@ -52,7 +52,7 @@ Node *sibling() {
 }
 
 // moves node down and moves given node in its place
-void moveDown(Node *nParent) {
+void moveDown(Nod *nParent) {
 	if (parent != NULL) {
 	if (isOnLeft()) {
 		parent->left = nParent;
@@ -71,12 +71,12 @@ bool hasRedChild() {
 };
 
 class RBTree {
-Node *root;
+Nod *root;
 
 // left rotates the given node
-void leftRotate(Node *x) {
+void leftRotate(Nod *x) {
 	// new parent will be node's right child
-	Node *nParent = x->right;
+	Nod *nParent = x->right;
 
 	// update root if current node is root
 	if (x == root)
@@ -95,9 +95,9 @@ void leftRotate(Node *x) {
 	nParent->left = x;
 }
 
-void rightRotate(Node *x) {
+void rightRotate(Nod *x) {
 	// new parent will be node's left child
-	Node *nParent = x->left;
+	Nod *nParent = x->left;
 
 	// update root if current node is root
 	if (x == root)
@@ -116,14 +116,14 @@ void rightRotate(Node *x) {
 	nParent->right = x;
 }
 
-void swapColors(Node *x1, Node *x2) {
+void swapColors(Nod *x1, Nod *x2) {
 	COLOR temp;
 	temp = x1->color;
 	x1->color = x2->color;
 	x2->color = temp;
 }
 
-void swapValues(Node *u, Node *v) {
+void swapValues(Nod *u, Nod *v) {
 	int temp;
 	temp = u->val;
 	u->val = v->val;
@@ -131,7 +131,7 @@ void swapValues(Node *u, Node *v) {
 }
 
 // fix red red at given node
-void fixRedRed(Node *x) {
+void fixRedRed(Nod *x) {
 	// if x is root color it black and return
 	if (x == root) {
 	x->color = BLACK;
@@ -139,7 +139,7 @@ void fixRedRed(Node *x) {
 	}
 
 	// initialize parent, grandparent, uncle
-	Node *parent = x->parent, *grandparent = parent->parent,
+	Nod *parent = x->parent, *grandparent = parent->parent,
 		*uncle = x->uncle();
 
 	if (parent->color != BLACK) {
@@ -179,8 +179,8 @@ void fixRedRed(Node *x) {
 
 // find node that do not have a left child
 // in the subtree of the given node
-Node *successor(Node *x) {
-	Node *temp = x;
+Nod *successor(Nod *x) {
+	Nod *temp = x;
 
 	while (temp->left != NULL)
 	temp = temp->left;
@@ -189,7 +189,7 @@ Node *successor(Node *x) {
 }
 
 // find node that replaces a deleted node in BST
-Node *BSTreplace(Node *x) {
+Nod *BSTreplace(Nod *x) {
 	// when node have 2 children
 	if (x->left != NULL && x->right != NULL)
 	return successor(x->right);
@@ -206,12 +206,12 @@ Node *BSTreplace(Node *x) {
 }
 
 // deletes the given node
-void deleteNode(Node *v) {
-	Node *u = BSTreplace(v);
+void deleteNode(Nod *v) {
+	Nod *u = BSTreplace(v);
 
 	// True when u and v are both black
 	bool uvBlack = ((u == NULL || u->color == BLACK) && (v->color == BLACK));
-	Node *parent = v->parent;
+	Nod *parent = v->parent;
 
 	if (u == NULL) {
 	// u is NULL therefore v is leaf
@@ -273,12 +273,12 @@ void deleteNode(Node *v) {
 	deleteNode(u);
 }
 
-void fixDoubleBlack(Node *x) {
+void fixDoubleBlack(Nod *x) {
 	if (x == root)
 	// Reached root
 	return;
 
-	Node *sibling = x->sibling(), *parent = x->parent;
+	Nod *sibling = x->sibling(), *parent = x->parent;
 	if (sibling == NULL) {
 	// No sibling, double black pushed up
 	fixDoubleBlack(parent);
@@ -341,11 +341,11 @@ public:
 
 RBTree() { root = NULL; }
 
-Node *getRoot() { return root; }
+Nod *getRoot() { return root; }
 
 
-Node *search(int n) {
-	Node *temp = root;
+Nod *search(int n) {
+	Nod *temp = root;
 	while (temp != NULL) {
 	if (n < temp->val) {
 		if (temp->left == NULL)
@@ -367,7 +367,7 @@ Node *search(int n) {
 
 
 int search01(int n) {
-    Node *temp = root;
+    Nod *temp = root;
     while (temp != NULL) {
         if (n < temp->val) {
             temp = temp->left;
@@ -381,13 +381,13 @@ int search01(int n) {
 }
 
 void insert(int n) {
-	Node *newNode = new Node(n);
+	Nod *newNode = new Nod(n);
 	if (root == NULL) {
 	
 	newNode->color = BLACK;
 	root = newNode;
 	} else {
-	Node *temp = search(n);
+	Nod *temp = search(n);
 
 	if (temp->val == n) {
 		
@@ -411,7 +411,7 @@ void deleteByVal(int n) {
 	
 	return;
 
-	Node *v = search(n), *u;
+	Nod *v = search(n), *u;
 
 	if (v->val != n) {
 	cout << "No node found to delete with value:" << n << endl;
@@ -421,7 +421,7 @@ void deleteByVal(int n) {
 	deleteNode(v);
 }
 
- void intervalXY(Node *node, int x, int y, vector<int> &result) {
+ void intervalXY(Nod *node, int x, int y, vector<int> &result) {
         if (node == NULL) {
             return;
         }
@@ -449,7 +449,7 @@ void deleteByVal(int n) {
     int maxlessthan (int n )
     {
         int ans= -maxim;
-        Node * curent= root;
+        Nod * curent= root;
         while(curent)
         {
             if(curent->val < n)
@@ -469,7 +469,7 @@ void deleteByVal(int n) {
     int minmorethan (int n )
     {
         int ans= maxim;
-        Node * curent= root;
+        Nod * curent= root;
         while(curent)
         {
             if(curent->val > n)
