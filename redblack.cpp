@@ -414,7 +414,6 @@ void deleteByVal(int n) {
 	Nod *v = search(n), *u;
 
 	if (v->val != n) {
-	cout << "No node found to delete with value:" << n << endl;
 	return;
 	}
 
