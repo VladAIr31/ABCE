@@ -7,6 +7,11 @@ ifstream f("abce.in");
 ofstream g("abce.out");
 const int maxim = 2147483647;
 enum COLOR { RED, BLACK };
+void nos()
+{
+    ios_base::sync_with_stdio(false);
+    f.tie(NULL);
+}
 
 class Nod {
 public:
@@ -489,6 +494,7 @@ void deleteByVal(int n) {
 };
 
 int main() {
+	nos();
 RBTree tree;
 int tests;
     f>>tests;
